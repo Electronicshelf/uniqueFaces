@@ -1,25 +1,24 @@
 clc
 % % clear
 % x_path = "/media/nyma/EXTERNAL1/PCA_UNIQUE/";
-% % raceC_path = "/media/nyma/EXTERNAL1/PCA_UNIQUE/name_raceC.txt";
-% raceG_path = "/media/nyma/EXTERNAL1/PCA_UNIQUE/name_raceG.txt";
+% % raceYY_path = "/media/nyma/EXTERNAL1/PCA_UNIQUE/name_raceYY.txt";
+% raceXX_path = "/media/nyma/EXTERNAL1/PCA_UNIQUE/name_raceXX.txt";
 
-% f = fopen(raceG_path,'r');
+% f = fopen(raceXX_path,'r');
 % f_path = "/media/nyma/EXTERNAL1/fairface-img-margin025-trainval";
 % batch_x = 5000;
 % tline = fgetl(f);
 
-% % raceC_list = zeros(batch_x,22500);
-% % raceG_list = zeros(batch_x,22500);
+% % raceYY_list = zeros(batch_x,22500);
+% % raceXX_list = zeros(batch_x,22500);
 % files_img={};
 % figh = 
 % i=1;
 
-% % raceC_list = extractFace(f_path, tline, raceC_list,i,batch_x,f);
-% % raceG_list = extractFace(f_path, tline, raceG_list,i,batch_x,f);
+% % raceYY_list = extractFace(f_path, tline, raceYY_list,i,batch_x,f);
+% % raceXX_list = extractFace(f_path, tline, raceXX_list,i,batch_x,f);
 % fclose(f);
 % clc
-
 
 % load("/media/nyma/EXTERNAL1/PCADATA/data_matlab.mat")
 % load("/media/nyma/EXTERNAL1/PCADATA/BFmatlab.mat")
@@ -29,54 +28,79 @@ clc
 % load("/media/nyma/EXTERNAL1/PCADATA/LM.mat")
 % load("/media/nyma/EXTERNAL1/PCADATA/LF.mat")
 
-raceC_str = {'WM_'};
-raceG_str = {'LM_'};
-race_res = {'RES_'};
-raceC_list = WM_list;
-raceG_list = LM_list;
 
-select = 600;
+select = 900;
 selectx = select;
+close all
+
+raceYY_str = {'WF_'};%
+raceXX_str = {'WM_'};
+
+% raceXX_list = WF_list;
+% raceYY_list = BM_list;
+race_res = {'RES_'};
+
 c_select = {'red','yellow','blue','black','green','magenta','cyan','yellow'};
 x_races  =  ["SEAM","BF","WM", "WF","SEAF","BM","LM", "LF"];
-% x_races  =  ["SEAM","Black Female","White Male", "White Female","BM","Black Male","Latino Male", "Latino Female"];
-c_str = strsplit(raceG_str{1},'_');
+
+x_val  =  {raceA_Val, raceB_Val, raceC_Val, raceD_Val, raceE_Val, raceF_Val, raceG_Val, raceH_Val};
+x_vec  =  {raceA_Vec, raceB_Vec, raceC_Vec, raceD_Vec, raceE_Vec, raceF_Vec, raceG_Vec, raceH_Vec};
+x_s    =  {raceA_S, raceB_S, raceC_S, raceD_S, raceE_S, raceF_S, raceG_S, raceH_S};
+x_list =  {SEAM_list, BF_list, WM_list, WF_list, SEAF_list, BM_list, LM_list, LF_list};
+
+
+%% Race Index
+c_str = strsplit(raceXX_str{1},'_');
 c_str = c_str{1};
-
-%% Hyper Parameters'b'
 [i_x, idx] = max(strcmp(x_races, c_str));
-% x_index = find(x_races , c_str{1});
-% index = find((x_races == c_str));
-% cc = find(ismember(x_races , c_str{1}));
-% c_select{idx}
 
-% raceC_list = WM_list;
-% raceG_list = LF_list;
 
-raceC_mean = mean(raceC_list, 1);
-raceG_mean = mean(raceG_list, 1); 
+yc_str = strsplit(raceYY_str{1},'_');
+yc_str = yc_str{1};
 
-raceC_matrix = raceC_list';
-raceG_matrix = raceG_list';
+%% Race Index
+[i_y, idy] = max(strcmp(x_races, yc_str));
 
-raceG_matrix_nm = raceG_matrix - raceG_mean';
-raceC_matrix_nm = raceC_matrix - raceC_mean';
+
+raceXX_Val = x_val{idx};
+raceXX_Vec = x_vec{idx};
+raceXX_S   = x_s{idx};
+
+raceYY_Val = x_val{idy};
+raceYY_Vec = x_vec{idy};
+raceYY_S   = x_s{idy};
+
+
+raceXX_list = x_list{idx};
+raceYY_list = x_list{idy};
+
+
+
+raceYY_mean = mean(raceYY_list, 1);
+raceXX_mean = mean(raceXX_list, 1); 
+
+raceYY_matrix = raceYY_list';
+raceXX_matrix = raceXX_list';
+
+raceXX_matrix_nm = raceXX_matrix - raceXX_mean';
+raceYY_matrix_nm = raceYY_matrix - raceYY_mean';
+
 
 %% PCA Extraction %%
-% [raceG_Vec, raceG_S, raceG_Val] = pca(raceG_matrix_nm'); 
+% [raceXX_Vec, raceXX_S, raceXX_Val] = pca(raceXX_matrix_nm'); 
 % pause(5)
-% [raceC_Vec, raceC_S, raceC_Val] = pca(raceC_matrix_nm');
+% [raceYY_Vec, raceYY_S, raceYY_Val] = pca(raceYY_matrix_nm');
 
 
 %% VECTOR ANGLE
-% raceG_Vec_angle = (raceG_Vec)';
-% raceC_Vec_angle = (raceC_Vec)'; 
-% a = raceG_Vec_angle;
-% b = raceC_Vec_angle;
+% raceXX_Vec_angle = (raceXX_Vec)';
+% raceYY_Vec_angle = (raceYY_Vec)'; 
+% a = raceXX_Vec_angle;
+% b = raceYY_Vec_angle;
 clc
-% angle_x = subspace(raceC_Vec_angle, raceG_Vec_angle);
+% angle_x = subspace(raceYY_Vec_angle, raceXX_Vec_angle);
 % 
-% angle_y = mPrinAngles(raceC_Vec_angle,raceG_Vec_angle);
+% angle_y = mPrinAngles(raceYY_Vec_angle,raceXX_Vec_angle);
 % angle_z = real(acosd(dot(a, b) / (norm(a) * norm(b))));
 % u=a';
 % v=b';
@@ -84,12 +108,12 @@ clc
 % CosTheta = max(min(dot(u,v)/(norm(u)*norm(v)),1),-1);
 % ThetaInDegrees = real(acosd(CosTheta));
 % angle_list = zeros(1,30);
-% raceG_Vec_P1 = raceG_Vec(:,1:select) * raceG_Vec(:,1:select)';
-% raceC_Vec_P1 = raceC_Vec(:,1:select) * raceC_Vec(:,1:select)';
-% norm_dist = norm(raceG_Vec_P1-raceC_Vec_P1);
+% raceXX_Vec_P1 = raceXX_Vec(:,1:select) * raceXX_Vec(:,1:select)';
+% raceYY_Vec_P1 = raceYY_Vec(:,1:select) * raceYY_Vec(:,1:select)';
+% norm_dist = norm(raceXX_Vec_P1-raceYY_Vec_P1);
 % for i = 1:  4999
-%     u = raceG_Vec_angle(i,:);
-%     v = raceC_Vec_angle(i,:);
+%     u = raceXX_Vec_angle(i,:);
+%     v = raceYY_Vec_angle(i,:);
 %     angle = dot(u,v)/(norm(u)* norm(v));
 %     angle =  real(acosd(angle));
 %     angle_list(i) = angle;
@@ -104,8 +128,8 @@ clc
 % xangle_list = zeros(1,4999);
 % dist_x = zeros(1,4999);
 % for i = 1:  4999
-%     u = raceG_Vec_angle(i,:);
-%     v = raceC_Vec_angle(i,:);
+%     u = raceXX_Vec_angle(i,:);
+%     v = raceYY_Vec_angle(i,:);
 %     angle = (u*v');
 %     angle =  real(acosd(angle));
 %     xangle_list(i) = angle;
@@ -115,68 +139,68 @@ clc
 % disp(dist_x());
 
 % %% PROJECTION %%
-% raceG_proj = raceG_matrix_nm(:,1:4999)' * raceG_Vec; 
-% raceG_proj  =  raceG_proj  * diag(raceG_Val) ;
+% raceXX_proj = raceXX_matrix_nm(:,1:4999)' * raceXX_Vec; 
+% raceXX_proj  =  raceXX_proj  * diag(raceXX_Val) ;
 % 
-% raceC_proj = raceC_matrix_nm(:,1:4999)' * raceC_Vec; 
-% raceC_proj  =  raceC_proj  * diag(raceC_Val) ;
+% raceYY_proj = raceYY_matrix_nm(:,1:4999)' * raceYY_Vec; 
+% raceYY_proj  =  raceYY_proj  * diag(raceYY_Val) ;
 
 
 
 %% PROJECTION %%
-raceG_matrix_nm  =  raceG_matrix_nm(:,1:4999)';
-raceG_proj_raceG  = raceG_matrix_nm * (diag(raceG_Val(1:select,:)) * raceG_Vec(:,1:select)')'; 
+raceXX_matrix_nm  =  raceXX_matrix_nm(:,1:4999)';
+raceXX_proj_raceXX  = raceXX_matrix_nm * (diag(raceXX_Val(1:select,:)) * raceXX_Vec(:,1:select)')'; 
 
-raceC_matrix_nm = raceC_matrix_nm(:,1:4999)';
-raceC_proj_raceC   = raceC_matrix_nm  * (diag(raceC_Val(1:select,:)) * raceC_Vec(:,1:select)')'; 
+raceYY_matrix_nm = raceYY_matrix_nm(:,1:4999)';
+raceYY_proj_raceYY   = raceYY_matrix_nm  * (diag(raceYY_Val(1:select,:)) * raceYY_Vec(:,1:select)')'; 
 
 
 %% PROJECTION FLIP %%
-raceG_matrix_raceC =  raceG_matrix - raceC_mean';
-raceG_proj_raceC   =  raceG_matrix_raceC(:,1:4999)' * (diag(raceC_Val(1:select,:)) * raceC_Vec(:,1:select)')'; 
+raceXX_matrix_raceYY =  raceXX_matrix - raceYY_mean';
+raceXX_proj_raceYY   =  raceXX_matrix_raceYY(:,1:4999)' * (diag(raceYY_Val(1:select,:)) * raceYY_Vec(:,1:select)')'; 
 
 
-raceC_matrix_raceG = raceC_matrix - raceG_mean';
-raceC_proj_raceG   = raceC_matrix_raceG(:,1:4999)' * (diag(raceG_Val(1:select,:)) * raceG_Vec(:,1:select)')'; 
+raceYY_matrix_raceXX = raceYY_matrix - raceXX_mean';
+raceYY_proj_raceXX   = raceYY_matrix_raceXX(:,1:4999)' * (diag(raceXX_Val(1:select,:)) * raceXX_Vec(:,1:select)')'; 
 
 %% Angle Vectors
-% u = abs(mean(raceG_Vec,1)');
-% v = abs(mean(raceC_Vec,1)');
+% u = abs(mean(raceXX_Vec,1)');
+% v = abs(mean(raceYY_Vec,1)');
 % 
 % for i = 1:4999
 % angle = vec_Angle(u,v);
 % end
 
 %% RECONSTRUCT %%
-raceG_Xhat  = (raceG_Vec * raceG_S(1:4999,:)') + raceG_mean';
-img_i = mat2gray(reshape( raceG_Xhat (:,14), 150,150));
+raceXX_Xhat  = (raceXX_Vec * raceXX_S(1:4999,:)') + raceXX_mean';
+img_i = mat2gray(reshape( raceXX_Xhat (:,14), 150,150));
 img_i = imrotate(img_i,-90);
 % imshow(img_i);
 
-raceC_Xhat  = (raceC_Vec * raceC_S(1:4999,:)') + raceC_mean';
-img_i = mat2gray(reshape( raceC_Xhat (:,78), 150,150));
+raceYY_Xhat  = (raceYY_Vec * raceYY_S(1:4999,:)') + raceYY_mean';
+img_i = mat2gray(reshape( raceYY_Xhat (:,78), 150,150));
 img_i = imrotate(img_i,-90);
 % imshow(img_i);
 
 %% FLIP RECONSTRCT %%
-% raceC projected on raceC 
-rec_raceC_proj_raceC = (raceC_proj_raceC  * pinv((diag(raceC_Val(1:select,:)) * raceC_Vec(:,1:select)')')); %+  raceG_mean;
-img = rec_raceC_proj_raceC ;
+% raceYY projected on raceYY 
+rec_raceYY_proj_raceYY = (raceYY_proj_raceYY  * pinv((diag(raceYY_Val(1:select,:)) * raceYY_Vec(:,1:select)')')); %+  raceXX_mean;
+img = rec_raceYY_proj_raceYY ;
 img_m = reshape(img(100,:), 150,150);
 img_m = imrotate(img_m,-90);
 % imshow(img_m);
 
 
-% raceG projected on raceG
-rec_raceG_proj_raceG   =  raceG_proj_raceG * pinv((diag(raceG_Val(1:select,:)) * raceG_Vec(:,1:select)')'); %+ raceC_mean; 
+% raceXX projected on raceXX
+rec_raceXX_proj_raceXX   =  raceXX_proj_raceXX * pinv((diag(raceXX_Val(1:select,:)) * raceXX_Vec(:,1:select)')'); %+ raceYY_mean; 
 img_m = reshape(img(100,:), 150,150);
 img_m = imrotate(img_m,-90);
 % % imshow(img_m);
 
 
-% % raceC projected on raceG 
-rec_raceC_proj_raceG = (raceC_proj_raceG  * pinv((diag(raceG_Val(1:select,:)) * raceG_Vec(:,1:select)')')); %+  raceG_mean;
-img = rec_raceC_proj_raceG ;
+% % raceYY projected on raceXX 
+rec_raceYY_proj_raceXX = (raceYY_proj_raceXX  * pinv((diag(raceXX_Val(1:select,:)) * raceXX_Vec(:,1:select)')')); %+  raceXX_mean;
+img = rec_raceYY_proj_raceXX ;
 img_m = reshape(img(100,:), 150,150);
 img_m = imrotate(img_m,-90);
 % imshow(img_m);
@@ -184,11 +208,11 @@ img_m = imrotate(img_m,-90);
 %% PATH
 path = "/home/nyma/Pictures";
 path_res="/home/nyma/Pictures/RES_";
-path_raceC = '';
-path_raceG = '';
-% fullfile(path_x{2}, [raceG_str{:}, num2str(ix),'_',num2str(select)
-path_x = {path_raceC, path_raceG};
-path_race = [raceC_str, raceG_str];
+path_raceYY = '';
+path_raceXX = '';
+% fullfile(path_x{2}, [raceXX_str{:}, num2str(ix),'_',num2str(select)
+path_x = {path_raceYY, path_raceXX};
+path_race = [raceYY_str, raceXX_str];
 for i = 1:length(path_x)
     path_x{i} = fullfile(path, path_race{i});
     if ~exist(path_x{i}, 'dir')
@@ -197,43 +221,43 @@ for i = 1:length(path_x)
 end
 
 % select = 50;
-raceG_matrix_raceC =  raceG_matrix - raceC_mean';
-raceG_proj_raceC   =  raceG_matrix_raceC(:,1:4999)' * (diag(raceC_Val(1:select,:)) * raceC_Vec(:,1:select)')'; 
+raceXX_matrix_raceYY =  raceXX_matrix - raceYY_mean';
+raceXX_proj_raceYY   =  raceXX_matrix_raceYY(:,1:4999)' * (diag(raceYY_Val(1:select,:)) * raceYY_Vec(:,1:select)')'; 
 
 
-raceC_matrix_raceG = raceC_matrix - raceG_mean';
-raceC_proj_raceG   = raceC_matrix_raceG(:,1:4999)' * (diag(raceG_Val(1:select,:)) * raceG_Vec(:,1:select)')'; 
+raceYY_matrix_raceXX = raceYY_matrix - raceXX_mean';
+raceYY_proj_raceXX   = raceYY_matrix_raceXX(:,1:4999)' * (diag(raceXX_Val(1:select,:)) * raceXX_Vec(:,1:select)')'; 
 
 %% Angle Vectors
-% u = abs(mean(raceG_Vec,1)');
-% v = abs(mean(raceC_Vec,1)');r(path_x{i})   
+% u = abs(mean(raceXX_Vec,1)');
+% v = abs(mean(raceYY_Vec,1)');r(path_x{i})   
 
-% path_raceC = "/home/nyma/Pictures/raceC";
-% path_raceG = "/home/nyma/Pictures/raceG";
-% raceG projected on raceC 
+% path_raceYY = "/home/nyma/Pictures/raceYY";
+% path_raceXX = "/home/nyma/Pictures/raceXX";
+% raceXX projected on raceYY 
 
-rec_raceG_proj_raceC   =  raceG_proj_raceC * pinv((diag(raceC_Val(1:select,:)) * raceC_Vec(:,1:select)')'); %+ raceC_mean; 
-img = rec_raceG_proj_raceC ;
+rec_raceXX_proj_raceYY   =  raceXX_proj_raceYY * pinv((diag(raceYY_Val(1:select,:)) * raceYY_Vec(:,1:select)')'); %+ raceYY_mean; 
+img = rec_raceXX_proj_raceYY ;
 img_m = reshape(img(100,:), 150,150);
 img_m = imrotate(img_m,-90);
 % imshow(img_m);
 
 
 %% RESIDUE 
-x_raceC_proj_raceC  =  (raceC_matrix_nm') - rec_raceC_proj_raceC'; 
-x_raceC_proj_raceC  = abs(x_raceC_proj_raceC);
-score_red_raceC_proj_raceC =  mean(x_raceC_proj_raceC,1);
+x_raceYY_proj_raceYY  =  (raceYY_matrix_nm') - rec_raceYY_proj_raceYY'; 
+x_raceYY_proj_raceYY  = abs(x_raceYY_proj_raceYY);
+score_red_raceYY_proj_raceYY =  mean(x_raceYY_proj_raceYY,1);
 
-% pd = fitdist((score_red_raceC_proj_raceC'),'kernel','Kernel','normal');
+% pd = fitdist((score_red_raceYY_proj_raceYY'),'kernel','Kernel','normal');
 % x = -.5:.1:.5;
 % y = pdf(pd,x);
 % plot(x,y,'Color','green','LineStyle','-')
 
-x_raceG_proj_raceG =  raceG_matrix_nm' - rec_raceG_proj_raceG'; 
-x_raceG_proj_raceG = abs(x_raceG_proj_raceG);
-score_red_raceG_proj_raceG = mean(x_raceG_proj_raceG,1);
+x_raceXX_proj_raceXX =  raceXX_matrix_nm' - rec_raceXX_proj_raceXX'; 
+x_raceXX_proj_raceXX = abs(x_raceXX_proj_raceXX);
+score_red_raceXX_proj_raceXX = mean(x_raceXX_proj_raceXX,1);
 
-% pd = fitdist(score_red_raceG_proj_raceG','kernel','Kernel','normal');
+% pd = fitdist(score_red_raceXX_proj_raceXX','kernel','Kernel','normal');
 % x =  -.5:.1:.5;
 % y = pdf(pd,x);
 % plot(x,y,'Color','c','LineStyle','-')
@@ -243,9 +267,9 @@ score_red_raceG_proj_raceG = mean(x_raceG_proj_raceG,1);
 % clc
 % res_list = zeros(3999);
 % for i = 1:5
-%     img_1 = raceG_matrix_nm(i,:);
-%     img_2 = rec_raceG_proj_raceG(i,:);
-%     img_3 = x_raceG_proj_raceG(:,i);
+%     img_1 = raceXX_matrix_nm(i,:);
+%     img_2 = rec_raceXX_proj_raceXX(i,:);
+%     img_3 = x_raceXX_proj_raceXX(:,i);
 %     img_1 = reshape(img_1, 150,150);
 %     img_1 = imrotate(img_1,-90);
 %     img_2 = reshape(img_2, 150,150);
@@ -270,7 +294,7 @@ score_red_raceG_proj_raceG = mean(x_raceG_proj_raceG,1);
 % for i = 1:length(xy)
 %     figs = figure();
 %     ix=xy(i);
-%     img_xx = raceG_matrix_nm(ix,:);
+%     img_xx = raceXX_matrix_nm(ix,:);
 %     img_xx = reshape(img_xx, 150,150);
 %     img_xx = imrotate(img_xx,-90);
 %     imshow(img_xx);
@@ -287,9 +311,9 @@ ffa = 1;
 
 % for i= 1:5
 %     figs = figure();
-%     img_1 = raceG_matrix_nm(i,:);
-%     img_2 = rec_raceG_proj_raceG(i,:);
-%     img_3 = x_raceG_proj_raceG(:,i);
+%     img_1 = raceXX_matrix_nm(i,:);
+%     img_2 = rec_raceXX_proj_raceXX(i,:);
+%     img_3 = x_raceXX_proj_raceXX(:,i);
 %     img_1 = reshape(img_1, 150,150);
 %     img_1 = imrotate(img_1,-90);
 %     subplot(131);imshow(img_1)
@@ -299,26 +323,26 @@ ffa = 1;
 %     img_3 = reshape(img_3, 150,150);
 %     img_3 = imrotate(img_3,-90);
 %     subplot(133);imshow(img_3) 
-%     saveas(figs, fullfile(path_x{2}, [raceG_str{:}, num2str(i),'_',num2str(select),'.jpg'])); % changed how name is saved
+%     saveas(figs, fullfile(path_x{2}, [raceXX_str{:}, num2str(i),'_',num2str(select),'.jpg'])); % changed how name is saved
 %     close all
 %     pause(2);
 % end
 
-x_raceC_proj_raceG  =  (raceC_matrix(:,1:4999) - raceG_mean(:,1:4999)) - rec_raceC_proj_raceG'; 
-x_raceC_proj_raceG  = abs(x_raceC_proj_raceG);
-score_red_raceC_proj_raceG =  mean(x_raceC_proj_raceG,1);
+x_raceYY_proj_raceXX  =  (raceYY_matrix(:,1:4999) - raceXX_mean(:,1:4999)) - rec_raceYY_proj_raceXX'; 
+x_raceYY_proj_raceXX  = abs(x_raceYY_proj_raceXX);
+score_red_raceYY_proj_raceXX =  mean(x_raceYY_proj_raceXX,1);
 
 
 figh = figure();
-hist(score_red_raceC_proj_raceC, 100,'Facecolor', 'blue');
+histogram(score_red_raceYY_proj_raceYY, 100,'Facecolor', c_select{idy});
 % h = findobj(gca,'Type','patch');
 % h.FaceColor = [1 0 0];
 % ex = xlim;
 % ey = ylim;
 % centerX = ex/2;
 % centerY = ey/2;
-score_std_raceC_proj_raceC = std(score_red_raceC_proj_raceC);
-% text(centerX(2)+0.009, centerY(2), [raceC_str{:},' std_','_', raceC_str{:},' = ', num2str(score_std_raceC_proj_raceC)], 'Color', 'black');
+score_std_raceYY_proj_raceYY = std(score_red_raceYY_proj_raceYY);
+% text(centerX(2)+0.009, centerY(2), [raceYY_str{:},' std_','_', raceYY_str{:},' = ', num2str(score_std_raceYY_proj_raceYY)], 'Color', 'black');
 % h.EdgeColor = 'w'; 
 % h.FaceAlpha = 0.9;
 title(['Residue Plot '  ' eigen faces used = ' num2str(select)])
@@ -326,22 +350,22 @@ xlabel('Residue Values') ;
 ylabel('Frequency'); 
 hold on;
 
-score_std_raceC_proj_raceG = std(score_red_raceC_proj_raceG);
-% text(centerX(2), centerY(2)+10,[raceC_str{:},' std_', '_', raceG_str{:},' = ', num2str(score_std_raceC_proj_raceG)], 'Color',  c_select{idx});
-histogram(score_red_raceC_proj_raceG, 100,'Facecolor', c_select{idx});
-AA = (strcat(raceC_str{:} ," projected on ", raceC_str{:}, '\ std =  ', num2str(score_std_raceC_proj_raceC)));
-AB = (strcat(raceC_str{:} ," projected on ", raceG_str{:}, '\ std =  ', num2str(score_std_raceC_proj_raceG)));
+score_std_raceYY_proj_raceXX = std(score_red_raceYY_proj_raceXX);
+% text(centerX(2), centerY(2)+10,[raceYY_str{:},' std_', '_', raceXX_str{:},' = ', num2str(score_std_raceYY_proj_raceXX)], 'Color',  c_select{idx});
+histogram(score_red_raceYY_proj_raceXX, 100,'Facecolor', c_select{idx});
+AA = (strcat(raceYY_str{:} ," projected on ", raceYY_str{:}, '\ std =  ', num2str(score_std_raceYY_proj_raceYY)));
+AB = (strcat(raceYY_str{:} ," projected on ", raceXX_str{:}, '\ std =  ', num2str(score_std_raceYY_proj_raceXX)));
 legend({AA  AB});
-saveas(figh, fullfile(path_x{1}, [raceG_str{:}, 'rec_xy', num2str(select),'_','.jpg'])); % changed how name is saved
+saveas(figh, fullfile(path_x{1}, [raceXX_str{:}, 'rec_xy', num2str(select),'_','.jpg'])); % changed how name is saved
 
 pause(2);
 % close all
 
 for i= 1:5
     figs = figure();
-    img_1 = raceC_matrix_nm(i,:);
-    img_2 = rec_raceC_proj_raceG(i,:);
-    img_3 = x_raceC_proj_raceG(:,i);
+    img_1 = raceYY_matrix_nm(i,:);
+    img_2 = rec_raceYY_proj_raceXX(i,:);
+    img_3 = x_raceYY_proj_raceXX(:,i);
     img_1 = reshape(img_1, 150,150);
     img_1 = imrotate(img_1,-90);
     subplot(131);imshow(img_1)
@@ -351,23 +375,23 @@ for i= 1:5
     img_3 = reshape(img_3, 150,150);
     img_3 = imrotate(img_3,-90);
     subplot(133);imshow(img_3) 
-    saveas(figs, fullfile(path_x{1}, [raceC_str{:}, raceG_str{:}, num2str(i),'_', num2str(select),'_','.jpg'])); % changed how name is saved
+    saveas(figs, fullfile(path_x{1}, [raceYY_str{:}, raceXX_str{:}, num2str(i),'_', num2str(select),'_','.jpg'])); % changed how name is saved
     close all
     pause(1);
 end
 
 close all
-x_raceG_proj_raceC  =  (raceG_matrix(:,1:4999) - raceC_mean(:,1:4999)) - rec_raceG_proj_raceC'; 
-x_raceG_proj_raceC = abs (x_raceG_proj_raceC);
-score_red_raceG_proj_raceC =  (mean(x_raceG_proj_raceC,1));
+x_raceXX_proj_raceYY  =  (raceXX_matrix(:,1:4999) - raceYY_mean(:,1:4999)) - rec_raceXX_proj_raceYY'; 
+x_raceXX_proj_raceYY = abs (x_raceXX_proj_raceYY);
+score_red_raceXX_proj_raceYY =  (mean(x_raceXX_proj_raceYY,1));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figh= figure();
-hist(score_red_raceG_proj_raceG,100);
+hist(score_red_raceXX_proj_raceXX,100);
 hold on;
 h = findobj(gca,'Type','patch');
-score_std_raceG_proj_raceG = std(score_red_raceG_proj_raceG);
-text(.09, 125,[raceG_str{:}, 'std_','_', raceG_str{:},' = ', num2str(score_std_raceG_proj_raceG)], 'Color', [0 0.5 0.5])
+score_std_raceXX_proj_raceXX = std(score_red_raceXX_proj_raceXX);
+text(.09, 125,[raceXX_str{:}, 'std_','_', raceXX_str{:},' = ', num2str(score_std_raceXX_proj_raceXX)], 'Color', [0 0.5 0.5])
 h.EdgeColor = 'w'; 
 h.FaceColor = [0 0.5 0.5];
 h.EdgeColor = 'w'; 
@@ -375,27 +399,27 @@ h.FaceAlpha = 0.9;
 title(['Residue Plot '  ' eigen faces used = ' num2str(select)] )
 xlabel('Residue Values') ;
 ylabel('Frequency'); 
-hist(score_red_raceG_proj_raceC, 100);
-score_std_raceG_proj_raceC = std(score_red_raceG_proj_raceC);
-text(.09, 115,[raceG_str{:},'std_', '_', raceC_str{:},' = ', num2str(score_std_raceG_proj_raceC)], 'Color','b')
-BB = (strcat(raceG_str{:} ,'projected_on_', raceG_str{:}));
-BA = (strcat(raceG_str{:} ,'projected_on_', raceC_str{:}));
+hist(score_red_raceXX_proj_raceYY, 100);
+score_std_raceXX_proj_raceYY = std(score_red_raceXX_proj_raceYY);
+text(.09, 115,[raceXX_str{:},'std_', '_', raceYY_str{:},' = ', num2str(score_std_raceXX_proj_raceYY)], 'Color','b')
+BB = (strcat(raceXX_str{:} ,'projected_on_', raceXX_str{:}));
+BA = (strcat(raceXX_str{:} ,'projected_on_', raceYY_str{:}));
 legend({BB BA});
-% legend({'raceG projected on raceG' 'raceG projected on raceC' });
-saveas(figh, fullfile(path_x{2}, [raceC_str{:}, 'rec_', num2str(select),'_','.jpg'])); % changed how name is saved
+% legend({'raceXX projected on raceXX' 'raceXX projected on raceYY' });
+saveas(figh, fullfile(path_x{2}, [raceYY_str{:}, 'rec_', num2str(select),'_','.jpg'])); % changed how name is saved
 close all
 pause(1);
 
-% pd = fitdist(score_red_raceG_proj_raceC','kernel','Kernel','normal');
+% pd = fitdist(score_red_raceXX_proj_raceYY','kernel','Kernel','normal');
 % x =  -.5:.1:.5;
 % y = pdf(pd,x);
 % plot(x,y,'Color','black','LineStyle','-')
 
 for i= 1:5
     figs = figure();
-    img_1 = raceG_matrix_nm(i,:);
-    img_2 = rec_raceG_proj_raceC(i,:);
-    img_3 = x_raceG_proj_raceC(:,i) ;%-  raceG_mean(:,i)';
+    img_1 = raceXX_matrix_nm(i,:);
+    img_2 = rec_raceXX_proj_raceYY(i,:);
+    img_3 = x_raceXX_proj_raceYY(:,i) ;%-  raceXX_mean(:,i)';
     img_1 = reshape(img_1, 150,150);
     img_1 = imrotate(img_1,-90);
     subplot(131);imshow(img_1)
@@ -405,7 +429,7 @@ for i= 1:5
     img_3 = reshape(img_3, 150,150);
     img_3 = imrotate(img_3,-90);
     subplot(133);imshow(img_3) 
-    saveas(figs, fullfile(path_x{2}, [raceG_str{:},raceC_str{:}, num2str(i),'_', num2str(select),'_','.jpg'])); % changed how name is saved
+    saveas(figs, fullfile(path_x{2}, [raceXX_str{:},raceYY_str{:}, num2str(i),'_', num2str(select),'_','.jpg'])); % changed how name is saved
     close all
     pause(2);
 end
@@ -414,7 +438,7 @@ end
 % img_m = reshape(img, 150,150);
 % img_m = imrotate(img_m,-90);
 % imshow(img_m);
-% score_red_raceC_proj_raceG =  mean(red_raceC_proj_raceG,1);
+% score_red_raceYY_proj_raceXX =  mean(red_raceYY_proj_raceXX,1);
 
 %% PLOT PROJ
 
@@ -423,15 +447,15 @@ hold on
 title(" Projections")
 xlabel('Number of Vectors') 
 ylabel('Projection Coefficients') 
-plot_raceC = rescale(mean(abs(raceC_proj_raceC),1));
-plot(plot_raceC(:,1:selectx),"r");
-plot_raceC_raceG = rescale(mean(abs(raceC_proj_raceG),1))';
-% plot((plot_raceC_raceG(1:selectx,:)),"b");
-AA = (strcat(raceC_str{:} ,'projected_on_', raceC_str{:}));
-AB = (strcat(raceC_str{:} ,'projected_on_', raceG_str{:}));
+plot_raceYY = rescale(mean(abs(raceYY_proj_raceYY),1));
+plot(plot_raceYY(:,1:selectx),"r");
+plot_raceYY_raceXX = rescale(mean(abs(raceYY_proj_raceXX),1))';
+% plot((plot_raceYY_raceXX(1:selectx,:)),"b");
+AA = (strcat(raceYY_str{:} ,'projected_on_', raceYY_str{:}));
+AB = (strcat(raceYY_str{:} ,'projected_on_', raceXX_str{:}));
 legend({AA AB});
-% legend({'raceC projected on raceC' 'raceC projected on raceG' });
-saveas(figp, fullfile(path_x{1}, [raceC_str{:},'_', raceC_str{:},num2str(select),'_','.jpg'])); % changed how name is saved
+% legend({'raceYY projected on raceYY' 'raceYY projected on raceXX' });
+saveas(figp, fullfile(path_x{1}, [raceYY_str{:},'_', raceYY_str{:},num2str(select),'_','.jpg'])); % changed how name is saved
 close all
 
 
@@ -442,15 +466,15 @@ hold on
 title(" Projections")
 xlabel('Number of Vectors') 
 ylabel('Projection Coefficients') 
-plot_raceG = rescale(mean(abs(raceG_proj_raceG),1));
-plot(plot_raceG(:,1:selectx), "r");
-plot_raceG_raceC = rescale(mean(abs(raceG_proj_raceC),1))';
-plot((plot_raceG_raceC(1:selectx,:)),"g");
-BB = (strcat(raceG_str{:} ,'projected_on_', raceG_str{:}));
-BA = (strcat(raceG_str{:} ,'projected_on_', raceC_str{:}));
+plot_raceXX = rescale(mean(abs(raceXX_proj_raceXX),1));
+plot(plot_raceXX(:,1:selectx), "r");
+plot_raceXX_raceYY = rescale(mean(abs(raceXX_proj_raceYY),1))';
+plot((plot_raceXX_raceYY(1:selectx,:)),"g");
+BB = (strcat(raceXX_str{:} ,'projected_on_', raceXX_str{:}));
+BA = (strcat(raceXX_str{:} ,'projected_on_', raceYY_str{:}));
 legend({BB BA});
-% legend({'raceG projected on raceGspectralcluster' 'raceG projected on raceC' });
-saveas(figx, fullfile(path_x{2}, [raceGB_str{:},'_', raceC_str{:},num2str(select),'_','.jpg'])); % changed how name is saved
+% legend({'raceXX projected on raceXXspectralcluster' 'raceXX projected on raceYY' });
+saveas(figx, fullfile(path_x{2}, [raceXXB_str{:},'_', raceYY_str{:},num2str(select),'_','.jpg'])); % changed how name is saved
 close all
 
 
@@ -478,4 +502,4 @@ close all
 
 
 
-% idx = spectralcluster(raceC_Vec,7);
+% idx = spectralcluster(raceYY_Vec,7);
