@@ -9,6 +9,7 @@ clc
 % batch_x = 5000;
 % tline = fgetl(f);
 
+
 % % raceYY_list = zeros(batch_x,22500);
 % % raceXX_list = zeros(batch_x,22500);
 % files_img={};
@@ -20,27 +21,26 @@ clc
 % fclose(f);
 % clc
 
-% load("/media/nyma/EXTERNAL1/PCADATA/data_matlab.mat")
-% load("/media/nyma/EXTERNAL1/PCADATA/BFmatlab.mat")
-% load("/media/nyma/EXTERNAL1/PCADATA/WMmatlab.mat")
-% load("/media/nyma/EXTERNAL1/PCADATA/BM.mat")
-% load("/media/nyma/EXTERNAL1/PCADATA/BMmatlab.mat")
-% load("/media/nyma/EXTERNAL1/PCADATA/LM.mat")
-% load("/media/nyma/EXTERNAL1/PCADATA/LF.mat")
+% load("/media/nyma/EXTERNAL1/PCADATA/WF_1.mat")
+% load("/media/nyma/EXTERNAL1/PCADATA/WM_1.mat")
+% load("/media/nyma/EXTERNAL1/PCADATA/BF_1.mat")
+% load("/media/nyma/EXTERNAL1/PCADATA/BM_1.mat")
+% load("/media/nyma/EXTERNAL1/PCADATA/LM_1.mat")
+% load("/media/nyma/EXTERNAL1/PCADATA/LF_1.mat")
+% load("/media/nyma/EXTERNAL1/PCADATA/SEAF_1.mat")
+% load("/media/nyma/EXTERNAL1/PCADATA/SEAM_1.mat")
 
-
-select = 900;
+select = 40;
 selectx = select;
 close all
 
 raceYY_str = {'WF_'};%
-raceXX_str = {'WM_'};
-
+raceXX_str = {'SEAF_'};
 % raceXX_list = WF_list;
 % raceYY_list = BM_list;
 race_res = {'RES_'};
 
-c_select = {'red','yellow','blue','black','green','magenta','cyan','yellow'};
+c_select = {'red',[0.51 0.2 0.4 ],'blue','black','green','magenta','cyan','yellow'};
 x_races  =  ["SEAM","BF","WM", "WF","SEAF","BM","LM", "LF"];
 
 x_val  =  {raceA_Val, raceB_Val, raceC_Val, raceD_Val, raceE_Val, raceF_Val, raceG_Val, raceH_Val};
@@ -48,19 +48,16 @@ x_vec  =  {raceA_Vec, raceB_Vec, raceC_Vec, raceD_Vec, raceE_Vec, raceF_Vec, rac
 x_s    =  {raceA_S, raceB_S, raceC_S, raceD_S, raceE_S, raceF_S, raceG_S, raceH_S};
 x_list =  {SEAM_list, BF_list, WM_list, WF_list, SEAF_list, BM_list, LM_list, LF_list};
 
-
 %% Race Index
 c_str = strsplit(raceXX_str{1},'_');
 c_str = c_str{1};
 [i_x, idx] = max(strcmp(x_races, c_str));
-
 
 yc_str = strsplit(raceYY_str{1},'_');
 yc_str = yc_str{1};
 
 %% Race Index
 [i_y, idy] = max(strcmp(x_races, yc_str));
-
 
 raceXX_Val = x_val{idx};
 raceXX_Vec = x_vec{idx};
@@ -70,11 +67,8 @@ raceYY_Val = x_val{idy};
 raceYY_Vec = x_vec{idy};
 raceYY_S   = x_s{idy};
 
-
 raceXX_list = x_list{idx};
 raceYY_list = x_list{idy};
-
-
 
 raceYY_mean = mean(raceYY_list, 1);
 raceXX_mean = mean(raceXX_list, 1); 
@@ -85,7 +79,6 @@ raceXX_matrix = raceXX_list';
 raceXX_matrix_nm = raceXX_matrix - raceXX_mean';
 raceYY_matrix_nm = raceYY_matrix - raceYY_mean';
 
-
 %% PCA Extraction %%
 % [raceXX_Vec, raceXX_S, raceXX_Val] = pca(raceXX_matrix_nm'); 
 % pause(5)
@@ -93,50 +86,57 @@ raceYY_matrix_nm = raceYY_matrix - raceYY_mean';
 
 
 %% VECTOR ANGLE
-% raceXX_Vec_angle = (raceXX_Vec)';
-% raceYY_Vec_angle = (raceYY_Vec)'; 
-% a = raceXX_Vec_angle;
-% b = raceYY_Vec_angle;
-clc
-% angle_x = subspace(raceYY_Vec_angle, raceXX_Vec_angle);
-% 
-% angle_y = mPrinAngles(raceYY_Vec_angle,raceXX_Vec_angle);
-% angle_z = real(acosd(dot(a, b) / (norm(a) * norm(b))));
-% u=a';
-% v=b';
+raceXX_Vec_angle = (raceXX_Vec);
+raceYY_Vec_angle = (raceYY_Vec); 
+a1 = raceXX_Vec_angle(:,1:select);
+b1 = raceYY_Vec_angle(:,1:select);
+% clc
 
+angle_x = subspace(abs(a1), abs(b1));
+angle_x 
+
+% angle_y = mPrinAngles(a,b);
+% angle_z = real(acosd(dot(a, b) / (norm(a) * norm(b))));
+% angle_z
+
+% u = a';
+% v = b';
+% 
+% CosThet = acos(abs(a'*b));
+% 
 % CosTheta = max(min(dot(u,v)/(norm(u)*norm(v)),1),-1);
+% CosTheta
+% aaaa = 1;
 % ThetaInDegrees = real(acosd(CosTheta));
-% angle_list = zeros(1,30);
+
+% angle_list = zeros(1,select);
 % raceXX_Vec_P1 = raceXX_Vec(:,1:select) * raceXX_Vec(:,1:select)';
 % raceYY_Vec_P1 = raceYY_Vec(:,1:select) * raceYY_Vec(:,1:select)';
 % norm_dist = norm(raceXX_Vec_P1-raceYY_Vec_P1);
+
 % for i = 1:  4999
 %     u = raceXX_Vec_angle(i,:);
 %     v = raceYY_Vec_angle(i,:);
 %     angle = dot(u,v)/(norm(u)* norm(v));
-%     angle =  real(acosd(angle));
+% %     angle =  real(acosd(angle));
 %     angle_list(i) = angle;
-% end%% Hyper Parameters'b'
-% c_select =  {'blue','yellow','red','magenta', 'green', 'cyan', 'black', 'brown'};
-% x_races  =  ["SEAM","Black Female","White Male", "White Female","BM","Black Male","Latino Male", "Latino Female"];
-% c_str = 
-% [i_x, idx] = max(strcmp(x_races, c_str));
+% end
+
+%% Hyper Parameters
 % disp(angle_list(:));
 
-clc
-% xangle_list = zeros(1,4999);
-% dist_x = zeros(1,4999);
-% for i = 1:  4999
+% clc
+% xangle_list = zeros(1,select);
+% dist_x = zeros(1,select);
+% for i = 1:  select
 %     u = raceXX_Vec_angle(i,:);
 %     v = raceYY_Vec_angle(i,:);
 %     angle = (u*v');
-%     angle =  real(acosd(angle));
+% %     angle =  real(acosd(angle));
 %     xangle_list(i) = angle;
 %     dist_x(i) = sind(angle);
 % end
-% disp(xangle_list(:));
-% disp(dist_x());
+
 
 % %% PROJECTION %%
 % raceXX_proj = raceXX_matrix_nm(:,1:4999)' * raceXX_Vec; 
@@ -144,7 +144,6 @@ clc
 % 
 % raceYY_proj = raceYY_matrix_nm(:,1:4999)' * raceYY_Vec; 
 % raceYY_proj  =  raceYY_proj  * diag(raceYY_Val) ;
-
 
 
 %% PROJECTION %%
@@ -230,7 +229,7 @@ raceYY_proj_raceXX   = raceYY_matrix_raceXX(:,1:4999)' * (diag(raceXX_Val(1:sele
 
 %% Angle Vectors
 % u = abs(mean(raceXX_Vec,1)');
-% v = abs(mean(raceYY_Vec,1)');r(path_x{i})   
+% v = abs(mean(raceYY_Vec,1)');  
 
 % path_raceYY = "/home/nyma/Pictures/raceYY";
 % path_raceXX = "/home/nyma/Pictures/raceXX";
@@ -334,31 +333,80 @@ score_red_raceYY_proj_raceXX =  mean(x_raceYY_proj_raceXX,1);
 
 
 figh = figure();
-histogram(score_red_raceYY_proj_raceYY, 100,'Facecolor', c_select{idy});
+a = histogram(score_red_raceYY_proj_raceYY, 100,'Facecolor', c_select{idy});
 % h = findobj(gca,'Type','patch');
 % h.FaceColor = [1 0 0];
 % ex = xlim;
 % ey = ylim;
 % centerX = ex/2;
 % centerY = ey/2;
+Spacing_lines =3;
 score_std_raceYY_proj_raceYY = std(score_red_raceYY_proj_raceYY);
 % text(centerX(2)+0.009, centerY(2), [raceYY_str{:},' std_','_', raceYY_str{:},' = ', num2str(score_std_raceYY_proj_raceYY)], 'Color', 'black');
 % h.EdgeColor = 'w'; 
 % h.FaceAlpha = 0.9;
+
 title(['Residue Plot '  ' eigen faces used = ' num2str(select)])
 xlabel('Residue Values') ;
 ylabel('Frequency'); 
 hold on;
 
 score_std_raceYY_proj_raceXX = std(score_red_raceYY_proj_raceXX);
-% text(centerX(2), centerY(2)+10,[raceYY_str{:},' std_', '_', raceXX_str{:},' = ', num2str(score_std_raceYY_proj_raceXX)], 'Color',  c_select{idx});
-histogram(score_red_raceYY_proj_raceXX, 100,'Facecolor', c_select{idx});
+b = histogram(score_red_raceYY_proj_raceXX, 100,'Facecolor', c_select{idx});
+
+% area_a = sum(a.Values)*a.BinWidth;
+% area_b = sum(b.Values)*b.BinWidth;
+% 
+% xsuby = abs(a.Values - b.Values);
+% xandy = (a.Values + b.Values);
+% 
+% intersection = (xandy - xsuby)/100;
+
+
+sumAOC = AOC(a.Values, a.BinEdges , b.Values, b.BinEdges);
+sumAOC
+
+% figure()
+% x_inter = histogram(intersection, 100,'Facecolor', c_select{idx});
+% area_x = sum(x_inter.Values)*x_inter.BinWidth;
+% sm = 0;
+% for i = 1:100
+%     x_a =  a.Values(i) * a.BinWidth;
+% %     a.BinWidth
+%     x_b = b.Values(i)  * b.BinWidth;
+% %     b.BinWidth
+%     x_c = min(x_a,x_b);
+%     sm = sm + x_c; 
+% end
+% sm = sm/min(sum(a.Values),sum(b.Values));
+% sm
+
+    
+area_c = abs(area_a - area_b); 
+
+% disp(area_c);
+% c = abs(score_red_raceYY_proj_raceYY - score_red_raceYY_proj_raceXX);
+% d = histogram(c, 100,'Facecolor', c_select{idx});
+ha = plot(NaN,NaN,'or');
+% area = sum(d.Values)*d.BinWidth;
+% d.BinWidth
+% sum(d.Values)
+% d.Values
+% cc_ = area;
+% disp(cc_);
+
 AA = (strcat(raceYY_str{:} ," projected on ", raceYY_str{:}, '\ std =  ', num2str(score_std_raceYY_proj_raceYY)));
 AB = (strcat(raceYY_str{:} ," projected on ", raceXX_str{:}, '\ std =  ', num2str(score_std_raceYY_proj_raceXX)));
-legend({AA  AB});
-saveas(figh, fullfile(path_x{1}, [raceXX_str{:}, 'rec_xy', num2str(select),'_','.jpg'])); % changed how name is saved
+% OV = (strcat('Intersection = ' ," " , num2str(sm)));
 
+% delete(d);
+legend({AA  AB });
+% add your text:
+
+saveas(figh, fullfile(path_x{1}, [raceXX_str{:}, 'rec_', num2str(select),'_','.jpg'])); % changed how name is saved
 pause(2);
+
+
 % close all
 
 for i= 1:5
@@ -406,7 +454,7 @@ BB = (strcat(raceXX_str{:} ,'projected_on_', raceXX_str{:}));
 BA = (strcat(raceXX_str{:} ,'projected_on_', raceYY_str{:}));
 legend({BB BA});
 % legend({'raceXX projected on raceXX' 'raceXX projected on raceYY' });
-saveas(figh, fullfile(path_x{2}, [raceYY_str{:}, 'rec_', num2str(select),'_','.jpg'])); % changed how name is saved
+saveas(figh, fullfile(path_x{2}, [raceYY_str{:}, 'rec_BFyXX', num2str(select),'_','.jpg'])); % changed how name is saved
 close all
 pause(1);
 
