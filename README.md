@@ -68,7 +68,7 @@ https://
   
 
 ## Citation
-If you find this work useful for your research, please cite our [paper](https://arxiv.org/abs/2005.02133):
+If you find this work useful for your research, please cite our [paper](https://):
 ```
 
 
