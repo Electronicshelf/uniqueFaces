@@ -17,7 +17,7 @@ Understating faces a little bit better
 
 
 ## DATASET
-https://docs.google.com/forms/d/e/1FAIpQLSd3OUwKxRcqZO24ZVm8CJZD2qrV1N2hF59gElrgB97dvrXeZA/viewform?usp=pp_url
+https://
 
 # HINTS
 - To use a new sketche style, the sketches must be trained with the model from scratch. Its best to use pictures with a white background or a single background color. This would reduce computational time and place more attention on the facial feataures.
